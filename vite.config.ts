@@ -4,10 +4,11 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  base: '/air-asset-management-front/',
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8080',
+        target: 'https://generator-manager-gydsehh4b3f6a2av.westcentralus-01.azurewebsites.net',
         changeOrigin: true,
       },
     },
