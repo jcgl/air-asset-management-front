@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s http://localhost:8080/api/users)",
+      "Bash(npm --version)",
+      "Bash(ls -la /Users/juan.luna/Documents/Projects/air-asset-management/)",
+      "Read(//Users/juan.luna/Documents/Projects/air-asset-management/**)",
+      "Bash(ls /Users/juan.luna/Documents/Projects/air-asset-management/.claude 2>/dev/null; cat /Users/juan.luna/Documents/Projects/air-asset-management/air-asset-management-front/.claude/settings.json 2>/dev/null; cat /Users/juan.luna/Documents/Projects/air-asset-management/air-asset-management-front/.claude/CLAUDE.md 2>/dev/null)",
+      "Bash(npm create *)",
+      "Bash(cp -r /Users/juan.luna/Documents/Projects/air-asset-management/temp-front/* /Users/juan.luna/Documents/Projects/air-asset-management/temp-front/.* /Users/juan.luna/Documents/Projects/air-asset-management/air-asset-management-front/)",
+      "Bash(rm -rf /Users/juan.luna/Documents/Projects/air-asset-management/temp-front)",
+      "Bash(npm install *)",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "Bash(curl -s http://localhost:5173)",
+      "Bash(curl -s http://localhost:5173/api/users)",
+      "Bash(curl -s http://localhost:5173/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173/api/users)",
+      "Bash(curl -s \"http://localhost:5173/src/main.tsx\")",
+      "Bash(curl -s \"http://localhost:5173/src/index.css\")"
+    ]
+  }
+}
