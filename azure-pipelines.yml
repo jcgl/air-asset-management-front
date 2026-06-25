@@ -1,0 +1,66 @@
+trigger:
+  - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+  - stage: Build
+    displayName: 'Build'
+    jobs:
+      - job: BuildJob
+        displayName: 'Build React App'
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: '20.x'
+            displayName: 'Install Node.js'
+
+          - script: npm ci
+            displayName: 'Install dependencies'
+
+          - script: npm run build
+            displayName: 'Build production bundle'
+
+          - script: |
+              mkdir $(Build.ArtifactStagingDirectory)/app
+              cp -r dist $(Build.ArtifactStagingDirectory)/app/dist
+              cp server.js $(Build.ArtifactStagingDirectory)/app/server.js
+              cp package.json $(Build.ArtifactStagingDirectory)/app/package.json
+              cp package-lock.json $(Build.ArtifactStagingDirectory)/app/package-lock.json
+              cd $(Build.ArtifactStagingDirectory)/app
+              npm ci --omit=dev
+            displayName: 'Prepare deployment package'
+
+          - task: ArchiveFiles@2
+            inputs:
+              rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/app'
+              includeRootFolder: false
+              archiveType: 'zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/app.zip'
+            displayName: 'Zip deployment package'
+
+          - publish: '$(Build.ArtifactStagingDirectory)/app.zip'
+            artifact: 'drop'
+            displayName: 'Publish artifact'
+
+  - stage: Deploy
+    displayName: 'Deploy'
+    dependsOn: Build
+    jobs:
+      - deployment: DeployJob
+        displayName: 'Deploy to Azure App Service'
+        environment: 'production'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureWebApp@1
+                  inputs:
+                    azureSubscription: 'generator-management-front-connection'
+                    appType: 'webAppLinux'
+                    appName: 'generator-manager'
+                    runtimeStack: 'NODE|20-lts'
+                    startUpCommand: 'node server.js'
+                    package: '$(Pipeline.Workspace)/drop/app.zip'
+                  displayName: 'Deploy to App Service'
