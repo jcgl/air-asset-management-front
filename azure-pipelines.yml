@@ -59,7 +59,7 @@ stages:
                   inputs:
                     azureSubscription: 'generator-management-front-connection'
                     appType: 'webAppLinux'
-                    appName: 'generator-manager'
+                    appName: 'air-asset-management-front'
                     runtimeStack: 'NODE|20-lts'
                     startUpCommand: 'node server.js'
                     package: '$(Pipeline.Workspace)/drop/app.zip'
